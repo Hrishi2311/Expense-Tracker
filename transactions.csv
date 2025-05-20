@@ -1,0 +1,10 @@
+Type,Category,Amount,Date
+Transaction [type=Income, category=Business, amount=50000.0, date=2025-05-20]
+Transaction [type=Expense, category=Food, amount=10000.0, date=2025-05-20]
+Transaction [type=Expense, category=Rent, amount=5000.0, date=2025-05-20]
+Transaction [type=Expense, category=Travel, amount=20000.0, date=2025-05-20]
+,,,
+Summary for MAY 2025,,,
+Total Income,50000,,
+Total Expense,35000,,
+Balance,15000,,
