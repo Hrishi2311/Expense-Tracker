@@ -9,6 +9,7 @@ public class ExpenseTracker {
 
     public static void main(String[] args) {
         while (true) {
+        	   // Main menu
             System.out.println("\n--- Expense Tracker ---");
             System.out.println("1. Add Transaction");
             System.out.println("2. View Monthly Summary");
@@ -19,6 +20,7 @@ public class ExpenseTracker {
             System.out.print("Choose an option: ");
             int choice = sc.nextInt();
 
+            // Handling menu choice
             switch (choice) {
                 case 1 -> addTransaction();
                 case 2 -> viewMonthlySummary();
@@ -31,14 +33,15 @@ public class ExpenseTracker {
     }
 
     static void addTransaction() {
-        sc.nextLine(); // clear buffer
+        sc.nextLine(); 
         
+        // Ask for type (Income/Expense)
         System.out.println("Select type:");
         System.out.println("1. Income");
         System.out.println("2. Expense");
         System.out.print("Enter choice (1 or 2): ");
         int typeChoice = sc.nextInt();
-        sc.nextLine(); // clear buffer after nextInt
+        sc.nextLine(); 
         
         String type;
         if (typeChoice == 1) {
@@ -51,6 +54,7 @@ public class ExpenseTracker {
         }
 
         String category = null;
+        // Category selection based on type
         if (type.equals("Income")) {
             System.out.println("Select Income category:");
             System.out.println("1. Salary");
@@ -67,7 +71,8 @@ public class ExpenseTracker {
                 System.out.println("Error: Invalid Income category choice.");
                 return;
             }
-        } else { // Expense
+        } else { 
+        	// Expense
             System.out.println("Select Expense category:");
             System.out.println("1. Food");
             System.out.println("2. Rent");
@@ -87,7 +92,8 @@ public class ExpenseTracker {
                 return;
             }
         }
-
+        
+        // Amount input with validation
         System.out.print("Enter amount: ");
         if (!sc.hasNextDouble()) {
             System.out.println("Error: Invalid amount entered.");
@@ -96,6 +102,7 @@ public class ExpenseTracker {
         }
         double amount = sc.nextDouble();
 
+        // Add transaction with current date
         Transaction t = new Transaction(type, category, amount, LocalDate.now());
         transactions.add(t);
         System.out.println("Transaction added successfully.");
@@ -120,8 +127,8 @@ public class ExpenseTracker {
 
     static void saveToFile() {
         try (PrintWriter pw = new PrintWriter(new FileWriter("transactions.csv", true))) {
-            // Write header (optional)
-        	pw.println();         // Write empty line
+            
+        	pw.println();        
             pw.println("Type,Category,Amount,Date");
 
             // Write all transactions
@@ -129,7 +136,7 @@ public class ExpenseTracker {
                 pw.println(t);
             }
 
-            // Calculate current month summary
+            // Monthly summary calculation
             double totalIncome = 0, totalExpense = 0;
             for (Transaction t : transactions) {
                 if (t.date.getMonthValue() == LocalDate.now().getMonthValue() &&
@@ -144,8 +151,7 @@ public class ExpenseTracker {
 
             double balance = totalIncome - totalExpense;
 
-            // Write summary
-            pw.println(); // blank line
+            pw.println(); 
 
             pw.println("Summary for " + LocalDate.now().getMonth() + " " + LocalDate.now().getYear());
             pw.println("Total Income," + totalIncome);
@@ -163,28 +169,27 @@ public class ExpenseTracker {
     static void loadFromFile() {
         try (BufferedReader br = new BufferedReader(new FileReader("transactions.csv"))) {
             String line;
-            transactions.clear(); // Clear previous in-memory entries
+            transactions.clear(); 
             boolean headerSkipped = false;
 
             System.out.println("\n--- Loaded Transactions ---");
 
             while ((line = br.readLine()) != null) {
             	
-                if (line.trim().isEmpty()) continue; // Skip empty lines
+                if (line.trim().isEmpty()) continue; 
 
                 String[] parts = line.split(",");
 
-                // Skip CSV header
                 if (!headerSkipped && parts[0].equalsIgnoreCase("Type")) {
                     headerSkipped = true;
                     continue;
                 }
 
                 if (parts.length < 4 || parts[2].equalsIgnoreCase("Amount")) {
-                    continue; // Silently skip summary or header lines
+                    continue; 
                 }
 
-
+                // Parse fields safely [handles values like "key=value"]
                 String type = parts[0].trim().split("=")[parts[0].contains("=") ? 1 : 0];
                 String category = parts[1].trim().split("=")[parts[1].contains("=") ? 1 : 0];
                 double amount = Double.parseDouble(parts[2].trim().split("=")[parts[2].contains("=") ? 1 : 0]);
@@ -195,12 +200,11 @@ public class ExpenseTracker {
                 Transaction transaction = new Transaction(type, category, amount, date);
                 transactions.add(transaction);
 
-                // Print the transaction details
                 System.out.println("Type     : " + type);
                 System.out.println("Category : " + category);
                 System.out.println("Amount   : " + amount);
                 System.out.println("Date     : " + date);
-                System.out.println(); // Add spacing between transactions
+                System.out.println(); 
             }
             
             double totalIncome = 0, totalExpense = 0;
