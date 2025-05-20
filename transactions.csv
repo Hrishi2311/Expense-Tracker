@@ -8,3 +8,11 @@ Summary for MAY 2025,,,
 Total Income,50000,,
 Total Expense,35000,,
 Balance,15000,,
+
+Type,Category,Amount,Date
+Transaction [type=Income, category=Salary, amount=2000.0, date=2025-05-20]
+
+Summary for MAY 2025
+Total Income,2000.0
+Total Expense,0.0
+Balance,2000.0
